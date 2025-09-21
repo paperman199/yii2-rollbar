@@ -27,8 +27,5 @@
         "allow-plugins": {
             "yiisoft/yii2-composer": true
         }
-    },
-    "require-dev": {
-        "vimeo/psalm": "^5.1"
     }
 }
