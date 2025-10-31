@@ -27,12 +27,21 @@ class Target extends \yii\log\Target
     {
         foreach ($this->messages as $message) {
             $levelName = self::getLevelName($message[1]);
-            Rollbar::log(RollbarLevelMapper::map($levelName), $message[0], [
-                'category' => $message[2],
-                'request_id' => $this->requestId,
-                'timestamp' => (int)$message[3],
-            ]);
+            if ($this->isLevelAllowed($message[1])) {
+                Rollbar::log(RollbarLevelMapper::map($levelName), $message[0], [
+                    'category' => $message[2],
+                    'request_id' => $this->requestId,
+                    'timestamp' => (int)$message[3],
+                ]);
+            }
         }
+    }
+
+    private function isLevelAllowed($level): bool
+    {
+        $levels = $this->levels;
+
+        return empty($levels) || ($levels & $level);
     }
 
     protected static function getLevelName($level): string
